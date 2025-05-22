@@ -4,6 +4,8 @@ import com.paulallan.dogs.feature.breedlist.domain.GetBreedListUseCase
 import com.paulallan.dogs.feature.breedlist.presentation.BreedListViewModel
 import com.paulallan.dogs.core.network.ApiConstants
 import com.paulallan.dogs.core.network.DogCeoApi
+import com.paulallan.dogs.feature.breedgallery.domain.GetRandomImagesForBreedUseCase
+import com.paulallan.dogs.feature.breedgallery.presentation.BreedGalleryViewModel
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
@@ -21,5 +23,7 @@ val appModule = module {
             .create(DogCeoApi::class.java)
     }
     single { GetBreedListUseCase(get()) }
+    single { GetRandomImagesForBreedUseCase(get()) }
     viewModel { BreedListViewModel(get()) }
+    viewModel { BreedGalleryViewModel(get()) }
 }
