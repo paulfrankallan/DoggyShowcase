@@ -2,11 +2,12 @@ package com.paulallan.dogs.feature.breedlist.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.paulallan.dogs.app.presentation.mvi.MVIViewModel
-import com.paulallan.dogs.feature.common.DogBreed
-import kotlinx.coroutines.delay
+import com.paulallan.dogs.feature.breedlist.domain.GetBreedListUseCase
 import kotlinx.coroutines.launch
+import com.paulallan.dogs.core.result.Result
 
 class BreedListViewModel(
+    private val getDogBreedsUseCase: GetBreedListUseCase
 ) : MVIViewModel<BreedListViewState, BreedListIntent>(BreedListViewState.Loading) {
     override suspend fun initialDataLoad() {
         handleIntent(BreedListIntent.LoadDogs)
@@ -19,19 +20,18 @@ class BreedListViewModel(
                     updateState {
                         BreedListViewState.Loading
                     }
-                    viewModelScope.launch {
-                        // Simulate network delay
-                        delay(2000)
+                    try {
+                        when (val result = getDogBreedsUseCase()) {
+                            is Result.Success -> updateState {
+                                BreedListViewState.Success(result.data)
+                            }
+                            is Result.Error -> updateState {
+                                BreedListViewState.Error(result.message)
+                            }
+                        }
+                    } catch (e: Exception) {
                         updateState {
-                            BreedListViewState.Success(
-                                listOf(
-                                    DogBreed("Bulldog", "https://example.com/bulldog.jpg"),
-                                    DogBreed("Beagle", "https://example.com/beagle.jpg"),
-                                    DogBreed("Poodle", "https://example.com/poodle.jpg"),
-                                    DogBreed("Labrador", "https://example.com/labrador.jpg"),
-                                    DogBreed("German Shepherd", "https://example.com/german_shepherd.jpg")
-                                )
-                            )
+                            BreedListViewState.Error(e.message ?: "Unknown error")
                         }
                     }
                 }

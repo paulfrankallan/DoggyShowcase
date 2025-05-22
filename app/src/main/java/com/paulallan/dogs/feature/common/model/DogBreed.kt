@@ -1,4 +1,4 @@
-package com.paulallan.dogs.feature.common
+package com.paulallan.dogs.feature.common.model
 
 data class DogBreed(
     val name: String,

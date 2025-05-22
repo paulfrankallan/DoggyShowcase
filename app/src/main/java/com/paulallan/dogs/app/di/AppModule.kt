@@ -1,9 +1,25 @@
 package com.paulallan.dogs.app.di
 
+import com.paulallan.dogs.feature.breedlist.domain.GetBreedListUseCase
 import com.paulallan.dogs.feature.breedlist.presentation.BreedListViewModel
+import com.paulallan.dogs.core.network.ApiConstants
+import com.paulallan.dogs.core.network.DogCeoApi
+import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import kotlin.jvm.java
 
 val appModule = module {
-    viewModel { BreedListViewModel() }
+    single {
+        Retrofit.Builder()
+            .baseUrl(ApiConstants.BASE_URL)
+            .client(OkHttpClient.Builder().build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(DogCeoApi::class.java)
+    }
+    single { GetBreedListUseCase(get()) }
+    viewModel { BreedListViewModel(get()) }
 }
