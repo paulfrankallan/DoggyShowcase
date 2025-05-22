@@ -1,5 +1,6 @@
 package com.paulallan.dogs.feature.breedlist.presentation
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,12 +28,14 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun BreedListScreen(
     modifier: Modifier = Modifier,
+    onBreedClick: (String) -> Unit = {},
 ) {
     val viewModel: BreedListViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
 
     BreedListContent(
         state = state,
+        onBreedClick = onBreedClick,
         modifier = modifier,
     )
 }
@@ -40,6 +43,7 @@ fun BreedListScreen(
 @Composable
 fun BreedListContent(
     state: BreedListViewState,
+    onBreedClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (state) {
@@ -59,7 +63,11 @@ fun BreedListContent(
                 contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp)
             ) {
                 items(state.dogBreeds, key = { it.name }) { dog ->
-                    Greeting(dog.name, modifier = modifier)
+                    Greeting(
+                        name = dog.name,
+                        modifier = modifier
+                            .clickable { onBreedClick(dog.name) }
+                    )
                 }
             }
         }
@@ -111,6 +119,6 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
 @Composable
 fun BreedListScreenPreview() {
     DoggyShowcaseTheme {
-        BreedListScreen()
+        BreedListScreen(onBreedClick = {})
     }
 }
