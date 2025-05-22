@@ -1,4 +1,4 @@
-package com.paulallan.dogs.ui.theme
+package com.paulallan.dogs.app.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
