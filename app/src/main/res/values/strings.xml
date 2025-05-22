@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Doggy Showcase</string>
+    
+    <!-- Image -->
+    <string name="loading">Loading…</string>
+    <string name="error_oops">Oops!</string>
 </resources>

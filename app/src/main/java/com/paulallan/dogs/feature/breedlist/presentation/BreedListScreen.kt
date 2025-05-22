@@ -1,6 +1,5 @@
 package com.paulallan.dogs.feature.breedlist.presentation
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,23 +18,29 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil.Coil.imageLoader
+import coil.ImageLoader
 import com.paulallan.dogs.app.theme.DoggyShowcaseTheme
+import com.paulallan.dogs.feature.common.model.DogBreed
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BreedListScreen(
     modifier: Modifier = Modifier,
+    viewModel: BreedListViewModel = koinViewModel(),
+    imageLoader: ImageLoader = imageLoader(LocalContext.current),
     onBreedClick: (String) -> Unit = {},
 ) {
-    val viewModel: BreedListViewModel = koinViewModel()
     val state by viewModel.state.collectAsState()
 
     BreedListContent(
         state = state,
         onBreedClick = onBreedClick,
+        imageLoader = imageLoader,
         modifier = modifier,
     )
 }
@@ -44,6 +49,7 @@ fun BreedListScreen(
 fun BreedListContent(
     state: BreedListViewState,
     onBreedClick: (String) -> Unit,
+    imageLoader: ImageLoader,
     modifier: Modifier = Modifier,
 ) {
     when (state) {
@@ -63,10 +69,11 @@ fun BreedListContent(
                 contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp)
             ) {
                 items(state.dogBreeds, key = { it.name }) { dog ->
-                    Greeting(
+                    DogBreedListItem(
                         name = dog.name,
-                        modifier = modifier
-                            .clickable { onBreedClick(dog.name) }
+                        imageUrl = dog.imageUrl,
+                        imageLoader = imageLoader,
+                        onClick = { onBreedClick(dog.name) }
                     )
                 }
             }
@@ -101,24 +108,30 @@ fun BreedListContent(
     }
 }
 
-
+@Preview(showBackground = true)
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier,
-        contentAlignment = Center
-    ) {
-        Text(
-            text = "Hello $name!",
-            textAlign = TextAlign.Center,
+fun BreedListContentPreview() {
+    DoggyShowcaseTheme {
+        BreedListContent(
+            state = BreedListViewState.Success(
+                dogBreeds = listOf(
+                    DogBreed(
+                        name = "Labrador Retriever",
+                        imageUrl = "https://images.dog.ceo/breeds/labrador/n02099712_5642.jpg"
+                    ),
+                    DogBreed(
+                        name = "German Shepherd",
+                        imageUrl = "https://images.dog.ceo/breeds/germanshepherd/n02106662_1234.jpg"
+                    ),
+                    DogBreed(
+                        name = "Golden Retriever",
+                        imageUrl = "https://images.dog.ceo/breeds/retriever-golden/n02099601_123.jpg"
+                    )
+                )
+            ),
+            onBreedClick = {},
+            imageLoader = imageLoader(LocalContext.current)
         )
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun BreedListScreenPreview() {
-    DoggyShowcaseTheme {
-        BreedListScreen(onBreedClick = {})
-    }
-}
