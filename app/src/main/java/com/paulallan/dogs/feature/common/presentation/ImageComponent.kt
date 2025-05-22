@@ -1,4 +1,4 @@
-package com.paulallan.dogs.feature.breedlist.presentation
+package com.paulallan.dogs.feature.common.presentation
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -30,19 +31,23 @@ import com.paulallan.dogs.R
 fun ImageComponent(
     url: String,
     contentDescription: String,
-    coverWidthDp: Int,
-    coverHeightDp: Int,
+    modifier: Modifier = Modifier,
+    coverWidthDp: Int? = null,
+    coverHeightDp: Int? = null,
     contentScale: ContentScale = ContentScale.Crop,
+    blur: Boolean = false,
     imageLoader: ImageLoader,
 ) {
     val density = LocalDensity.current
-    val widthPx = remember(coverWidthDp, density) { (coverWidthDp * density.density).toInt() }
-    val heightPx = remember(coverHeightDp, density) { (coverHeightDp * density.density).toInt() }
+    val widthPx = remember(coverWidthDp, density) { coverWidthDp?.let { (it * density.density).toInt() } }
+    val heightPx = remember(coverHeightDp, density) { coverHeightDp?.let { (it * density.density).toInt() } }
     SubcomposeAsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
             .data(url)
             .crossfade(true)
-            .size(width = widthPx, height = heightPx)
+            .apply {
+                if (widthPx != null && heightPx != null) size(width = widthPx, height = heightPx)
+            }
             .build(),
         imageLoader = imageLoader,
         contentDescription = contentDescription, // TODO add a formatted string?
@@ -83,11 +88,13 @@ fun ImageComponent(
                 }
             }
         },
-        modifier = Modifier
-            .size(
-                width = coverWidthDp.dp,
-                height = coverHeightDp.dp
+        modifier = modifier
+            .then(
+                if (coverWidthDp != null && coverHeightDp != null) {
+                    Modifier.size(width = coverWidthDp.dp, height = coverHeightDp.dp)
+                } else Modifier
             )
             .clip(MaterialTheme.shapes.small)
+            .let { if (blur) it.blur(10.dp) else it }
     )
 }

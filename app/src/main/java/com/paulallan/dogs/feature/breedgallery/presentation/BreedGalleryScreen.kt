@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -52,17 +53,11 @@ fun BreedGalleryContent(
         }
 
         is BreedGalleryViewState.Success -> {
-            LazyColumn(
-                modifier = modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.spacedBy(16.dp),
-                contentPadding = PaddingValues(vertical = 16.dp, horizontal = 16.dp)
-            ) {
-                items(state.images, key = { it }) { dog ->
-                    Text(
-                        text = dog
-                    )
-                }
-            }
+            GalleryGrid(
+                images = state.imageUrls,
+                modifier = Modifier
+                    .fillMaxSize()
+            )
         }
 
         is BreedGalleryViewState.Error -> {
