@@ -10,8 +10,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import com.paulallan.dogs.app.theme.DoggyShowcaseTheme
 import com.paulallan.dogs.core.nav.NavGraph
-import com.paulallan.dogs.core.nav.Routes
-import com.paulallan.dogs.feature.breedlist.presentation.BreedListScreen
 
 class AppActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

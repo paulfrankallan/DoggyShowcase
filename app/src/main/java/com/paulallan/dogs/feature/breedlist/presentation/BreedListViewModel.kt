@@ -2,9 +2,9 @@ package com.paulallan.dogs.feature.breedlist.presentation
 
 import androidx.lifecycle.viewModelScope
 import com.paulallan.dogs.app.presentation.mvi.MVIViewModel
+import com.paulallan.dogs.core.result.Result
 import com.paulallan.dogs.feature.breedlist.domain.GetBreedListUseCase
 import kotlinx.coroutines.launch
-import com.paulallan.dogs.core.result.Result
 
 class BreedListViewModel(
     private val getDogBreedsUseCase: GetBreedListUseCase

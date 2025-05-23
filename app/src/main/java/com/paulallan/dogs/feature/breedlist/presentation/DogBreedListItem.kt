@@ -18,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.ImageLoader
 import com.paulallan.dogs.feature.common.presentation.ImageComponent
-import kotlin.let
 
 @Composable
 fun DogBreedListItem(

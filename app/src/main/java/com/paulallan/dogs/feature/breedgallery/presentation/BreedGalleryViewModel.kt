@@ -10,25 +10,35 @@ import kotlinx.coroutines.launch
 class BreedGalleryViewModel(
     private val getRandomImagesForBreedUseCase: GetRandomImagesForBreedUseCase
 ) : MVIViewModel<BreedGalleryViewState, BreedGalleryIntent>(BreedGalleryViewState.Loading) {
+
     fun handleIntent(intent: BreedGalleryIntent) {
         when (intent) {
             is BreedGalleryIntent.LoadGallery -> {
-                viewModelScope.launch {
-                    updateState { BreedGalleryViewState.Loading }
-                    when (
-                        val result = getRandomImagesForBreedUseCase(
-                            breed = intent.breed,
-                            count = ApiConstants.DEFAULT_RANDOM_DOG_IMAGE_COUNT
-                        )
-                    ) {
-                        is Result.Success -> updateState {
-                            BreedGalleryViewState.Success(result.data)
-                        }
+                loadGallery(intent.breed)
+            }
+            is BreedGalleryIntent.RefreshGallery -> {
+                loadGallery(intent.breed)
+            }
+        }
+    }
 
-                        is Result.Error -> updateState {
-                            BreedGalleryViewState.Error(result.message)
-                        }
-                    }
+    private fun loadGallery(breed: String) {
+        viewModelScope.launch {
+            when (
+                val result = getRandomImagesForBreedUseCase(
+                    breed = breed,
+                    count = ApiConstants.DEFAULT_RANDOM_DOG_IMAGE_COUNT
+                )
+            ) {
+                is Result.Success -> updateState {
+                    BreedGalleryViewState.Success(
+                        breed = breed,
+                        imageUrls = result.data,
+                        isRefreshing = false
+                    )
+                }
+                is Result.Error -> updateState {
+                    BreedGalleryViewState.Error(result.message)
                 }
             }
         }

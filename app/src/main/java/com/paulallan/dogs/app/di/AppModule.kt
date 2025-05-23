@@ -1,17 +1,16 @@
 package com.paulallan.dogs.app.di
 
-import com.paulallan.dogs.feature.breedlist.domain.GetBreedListUseCase
-import com.paulallan.dogs.feature.breedlist.presentation.BreedListViewModel
 import com.paulallan.dogs.core.network.ApiConstants
 import com.paulallan.dogs.core.network.DogCeoApi
 import com.paulallan.dogs.feature.breedgallery.domain.GetRandomImagesForBreedUseCase
 import com.paulallan.dogs.feature.breedgallery.presentation.BreedGalleryViewModel
+import com.paulallan.dogs.feature.breedlist.domain.GetBreedListUseCase
+import com.paulallan.dogs.feature.breedlist.presentation.BreedListViewModel
 import okhttp3.OkHttpClient
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import kotlin.jvm.java
 
 val appModule = module {
     single {

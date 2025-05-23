@@ -1,8 +1,11 @@
 <resources>
-    <string name="app_name">Doggy Showcase</string>
+    <string name="app_name">Dog Breeds</string>
     
     <string name="dog_breeds_title">Dog Breeds</string>
-    
+
+    <!-- Breed Gallery -->
+    <string name="back">Back</string>
+
     <!-- Image -->
     <string name="loading">Loading…</string>
     <string name="error_oops">Oops!</string>

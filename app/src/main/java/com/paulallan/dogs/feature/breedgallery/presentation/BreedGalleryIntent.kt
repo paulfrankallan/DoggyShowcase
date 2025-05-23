@@ -4,4 +4,5 @@ import com.paulallan.dogs.app.presentation.mvi.Intent
 
 sealed class BreedGalleryIntent: Intent {
     data class LoadGallery(val breed: String) : BreedGalleryIntent()
+    data class RefreshGallery(val breed: String) : BreedGalleryIntent()
 }
