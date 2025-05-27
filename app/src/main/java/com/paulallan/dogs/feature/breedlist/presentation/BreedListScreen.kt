@@ -1,9 +1,10 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
 
 package com.paulallan.dogs.feature.breedlist.presentation
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,10 +19,11 @@ import org.koin.androidx.compose.koinViewModel
 fun BreedListScreen(
     modifier: Modifier = Modifier,
     viewModel: BreedListViewModel = koinViewModel(),
-    imageLoader: ImageLoader = imageLoader(LocalContext.current),
     onBreedClick: (String) -> Unit = {},
 ) {
     val state by viewModel.state.collectAsState()
+
+    val onRefresh = { viewModel.handleIntent(BreedListIntent.RefreshBreeds) }
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.primary,
@@ -40,10 +42,8 @@ fun BreedListScreen(
         BreedListContent(
             state = state,
             onBreedClick = onBreedClick,
-            imageLoader = imageLoader,
-            modifier = modifier.padding(paddingValues)
+            modifier = modifier.padding(paddingValues),
+            onRefresh = onRefresh
         )
     }
 }
-
-

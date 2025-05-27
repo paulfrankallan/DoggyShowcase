@@ -2,13 +2,7 @@
 
 package com.paulallan.dogs.feature.breedgallery.presentation
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
@@ -21,14 +15,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import com.paulallan.dogs.R
+import com.paulallan.dogs.feature.common.presentation.ErrorContent
 import com.paulallan.dogs.feature.common.presentation.LoadingSpinner
-import java.util.Locale
-
-private val IconButtonSize = 48.dp
+import java.util.*
 
 @Composable
 fun BreedGalleryContent(
@@ -39,7 +34,11 @@ fun BreedGalleryContent(
     val scrollState = rememberScrollState()
     when (state) {
         is BreedGalleryViewState.Loading -> {
-            LoadingSpinner()
+            LoadingSpinner(
+                modifier = modifier
+                    .testTag("breed_gallery_loading"),
+                spinnerSize = dimensionResource(id = R.dimen.spinner_size_large)
+            )
         }
 
         is BreedGalleryViewState.Success -> {
@@ -52,12 +51,13 @@ fun BreedGalleryContent(
                 modifier = modifier
                     .fillMaxSize()
                     .pullRefresh(pullRefreshState)
+                    .testTag("breed_gallery_success"),
             ) {
                 GalleryGrid(
                     images = state.imageUrls,
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(scrollState)
+                        .verticalScroll(scrollState),
                 )
 
                 PullRefreshIndicator(
@@ -69,9 +69,20 @@ fun BreedGalleryContent(
         }
 
         is BreedGalleryViewState.Error -> {
-            val message = state.message
-            Box(modifier = modifier.fillMaxSize(), contentAlignment = Center) {
-                Text(text = "Error: $message", color = MaterialTheme.colorScheme.error)
+            val pullRefreshState = rememberPullRefreshState(
+                refreshing = state.isRefreshing,
+                onRefresh = onRefresh
+            )
+
+            Box(
+                modifier = modifier
+                    .fillMaxSize()
+                    .pullRefresh(pullRefreshState)
+                    .verticalScroll(scrollState)
+                    .testTag("breed_gallery_error"),
+                contentAlignment = Center
+            ) {
+                ErrorContent(message = state.message)
             }
         }
     }
@@ -91,14 +102,14 @@ fun BreedGalleryTopAppBarTitleContent(
         Text(
             text = breed.replaceFirstChar { it.uppercase(Locale.getDefault()) },
             textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.displaySmall,
+            style = MaterialTheme.typography.headlineLarge,
             fontFamily = FontFamily.Cursive,
             color = MaterialTheme.colorScheme.onPrimary,
             modifier = Modifier
                 .weight(1f)
                 .align(Alignment.CenterVertically)
         )
-        Spacer(modifier = Modifier.width(IconButtonSize))
+        Spacer(modifier = Modifier.width(dimensionResource(id = R.dimen.iconButtonSize)))
     }
 }
 

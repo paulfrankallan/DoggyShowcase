@@ -12,12 +12,13 @@ interface DogCeoApi {
 
     @GET(ApiConstants.ENDPOINT_RANDOM_IMAGE_FOR_BREED)
     suspend fun getRandomImageForBreed(
-        @Path("breed") breed: String
+        @Path("breed", encoded = true) breed: String
     ): BreedImageResponse
 
     @GET(ApiConstants.ENDPOINT_RANDOM_IMAGES_FOR_BREED)
     suspend fun getRandomImagesForBreed(
-        @Path("breed") breed: String,
+        @Path("breed", encoded = true) breed: String,
         @Path("count") count: Int
     ): BreedImagesResponse
 }
+

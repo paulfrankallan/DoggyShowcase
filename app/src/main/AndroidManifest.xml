@@ -16,10 +16,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DoggyShowcase"
-        tools:targetApi="31"
+        android:enableOnBackInvokedCallback="true"
+        tools:ignore="UnusedAttribute"
         >
         <activity
-            android:name=".app.presentation.AppActivity"
+            android:name=".app.AppActivity"
             android:exported="true"
             android:theme="@style/Theme.DoggyShowcase"
             >
@@ -32,3 +33,4 @@
     </application>
 
 </manifest>
+

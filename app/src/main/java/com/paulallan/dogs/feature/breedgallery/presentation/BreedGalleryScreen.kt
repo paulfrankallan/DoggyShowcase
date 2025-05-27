@@ -8,28 +8,25 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import com.paulallan.dogs.R
-import com.paulallan.dogs.core.nav.LocalNavController
+import com.paulallan.dogs.app.nav.LocalNavController
 import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun BreedGalleryScreen(
     modifier: Modifier = Modifier,
-    viewModel: BreedGalleryViewModel = koinViewModel(),
     breed: String,
+    viewModel: BreedGalleryViewModel = koinViewModel(
+        parameters = { parametersOf(breed) }
+    ),
 ) {
     val navController = LocalNavController.current
     val state by viewModel.state.collectAsState()
-
-    LaunchedEffect(breed) {
-        viewModel.handleIntent(BreedGalleryIntent.LoadGallery(breed))
-    }
 
     val onRefresh = { viewModel.handleIntent(BreedGalleryIntent.RefreshGallery(breed)) }
 

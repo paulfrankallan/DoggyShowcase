@@ -1,12 +1,15 @@
 <resources>
     <string name="app_name">Dog Breeds</string>
-    
-    <string name="dog_breeds_title">Dog Breeds</string>
+
+    <!-- Breed List -->
+    <string name="breed_list_title">Dog Breeds</string>
+    <string name="breed_list_error_info">This would be a user-presentable error UI in a production app.</string>
 
     <!-- Breed Gallery -->
     <string name="back">Back</string>
 
     <!-- Image -->
+    <string name="image_content_description_default">Image</string>
     <string name="loading">Loading…</string>
-    <string name="error_oops">Oops!</string>
+    <string name="error_oops">Oops</string>
 </resources>

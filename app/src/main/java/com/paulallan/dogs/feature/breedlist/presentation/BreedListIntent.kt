@@ -1,7 +1,8 @@
 package com.paulallan.dogs.feature.breedlist.presentation
 
-import com.paulallan.dogs.app.presentation.mvi.Intent
+import com.paulallan.dogs.core.mvi.Intent
 
 sealed class BreedListIntent : Intent {
-    object LoadDogs : BreedListIntent()
+    object LoadBreeds : BreedListIntent()
+    object RefreshBreeds : BreedListIntent()
 }

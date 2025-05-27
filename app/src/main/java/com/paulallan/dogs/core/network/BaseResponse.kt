@@ -7,7 +7,7 @@ interface BaseResponse {
 @Suppress("UNCHECKED_CAST")
 fun <T> BaseResponse.requireSuccess(data: T): T {
     if (status != "success") {
-        throw IllegalStateException("API returned error status: $status")
+        throw IllegalStateException("API error status: $status")
     }
 
     return data
